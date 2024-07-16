@@ -27,7 +27,7 @@ export default function NewPost() {
 
   async function handlePost() {
     if (post === "") {
-      console.log("Conteúdo inválido");
+      alert("Post vazio");
       return;
     }
 
@@ -42,7 +42,6 @@ export default function NewPost() {
     } catch (err) {
       avatarUrl = null;
     }
-
     const docRef = await addDoc(collection(db, "posts"), {
       createBy: new Date(),
       content: post,

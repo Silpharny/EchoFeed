@@ -1,6 +1,11 @@
-import React, { useLayoutEffect, useState, useCallback } from "react";
-import { Text } from "react-native";
-import { Container } from "./styles";
+import React, {
+  useLayoutEffect,
+  useState,
+  useCallback,
+  useContext,
+} from "react";
+import { Text, View, ActivityIndicator } from "react-native";
+import { Container, ListPosts } from "./styles";
 
 import {
   useRoute,
@@ -11,9 +16,14 @@ import react from "react";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 
+import Card from "../../components/Card";
+
+import { AuthContext } from "../../contexts/auth";
+
 export default function PostsUser() {
   const route = useRoute();
   const navigation = useNavigation();
+  const { authUser } = useContext(AuthContext);
 
   const [title, setTitle] = useState(route.params?.title);
 
@@ -47,7 +57,7 @@ export default function PostsUser() {
 
         if (isActive) {
           setPost(postList);
-          console.log(postList);
+
           setLoading(false);
         }
       });
@@ -60,7 +70,19 @@ export default function PostsUser() {
 
   return (
     <Container>
-      <Text>{route.params?.title}</Text>
+      {loading ? (
+        <View
+          style={{ flex: 1, alignItem: "center", justifyContent: "center" }}
+        >
+          <ActivityIndicator size="large" color="#dc6601" />
+        </View>
+      ) : (
+        <ListPosts
+          data={post}
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item }) => <Card data={item} userId={authUser.uid} />}
+        />
+      )}
     </Container>
   );
 }

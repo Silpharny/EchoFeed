@@ -51,7 +51,9 @@ export default function AuthProvider({ children }) {
       .then(async (value) => {
         let uid = value.user.uid;
         let data = {
+          uid: uid,
           name: name,
+          email: email,
           createAt: new Date(),
         };
 
@@ -113,6 +115,8 @@ export default function AuthProvider({ children }) {
         handleLogout,
         authUser,
         authLoading,
+        setAuthUser,
+        storageUser,
       }}
     >
       {children}
